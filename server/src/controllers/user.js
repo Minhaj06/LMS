@@ -4,12 +4,12 @@ exports.createUser = async (req, res) => {
   const { firebaseUid, email, name } = req.body;
 
   try {
+    // Check if a user with the same firebaseUid or email already exists
     const existingUser = await User.findOne({ $or: [{ firebaseUid }, { email }] });
-
     if (existingUser) {
       return res
         .status(409)
-        .json({ message: "User with the same firebaseUid or email already exists" });
+        .json({ message: "User with this email or Firebase UID already exists." });
     }
 
     const user = new User({ firebaseUid, email, name });
