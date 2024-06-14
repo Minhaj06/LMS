@@ -1,8 +1,12 @@
-const Course = require("../models/Course");
+const Course = require("../models/course");
+const User = require("../models/user");
 
 exports.getCourses = async (req, res) => {
+  const email = req?.user?.email;
   try {
-    const courses = await Course.find({ instructor: req.user.uid });
+    const user = await User.findOne({ email: email });
+
+    const courses = await Course.find({ instructor: user?._id }).populate("instructor");
     res.status(200).json(courses);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -10,14 +14,24 @@ exports.getCourses = async (req, res) => {
 };
 
 exports.addCourse = async (req, res) => {
-  const { title, description, price } = req.body;
-
+  const { title, description, price, photo } = req.body;
+  const email = req?.user?.email;
   try {
+    const user = await User.findOne({ email: email });
+
+    const existingCourse = await Course.findOne({ title, instructor: user?._id });
+    if (existingCourse) {
+      return res
+        .status(409)
+        .json({ message: "Course with this title already exists for the instructor" });
+    }
+
     const course = new Course({
       title,
       description,
       price,
-      instructor: req.user.uid,
+      photo,
+      instructor: user?._id,
     });
     await course.save();
     res.status(201).json(course);

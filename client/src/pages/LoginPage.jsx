@@ -2,11 +2,13 @@ import React, { useContext } from "react";
 import { Form, Input, Button, notification } from "antd";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/auth";
+
 const LoginPage = () => {
   const { logIn, loading } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
+  const [form] = Form.useForm();
 
   const onFinish = (values) => {
     const { email, password } = values;
@@ -20,7 +22,8 @@ const LoginPage = () => {
           message: "Login Successful",
           description: "You have successfully logged in.",
         });
-        // navigate(from, { replace: true });
+        form.resetFields();
+        navigate(from, { replace: true });
       })
       .catch((error) => {
         loading(false);
@@ -40,6 +43,7 @@ const LoginPage = () => {
       <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
         <h2 className="text-2xl font-bold mb-8 text-center">Login</h2>
         <Form
+          form={form}
           name="login"
           initialValues={{ remember: true }}
           onFinish={onFinish}

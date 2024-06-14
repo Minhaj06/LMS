@@ -1,4 +1,4 @@
-const User = require("../models/User");
+const User = require("../models/user");
 
 exports.createUser = async (req, res) => {
   const { firebaseUid, email, name } = req.body;
@@ -15,6 +15,22 @@ exports.createUser = async (req, res) => {
     const user = new User({ firebaseUid, email, name });
     await user.save();
     res.status(201).json(user);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+exports.getUser = async (req, res) => {
+  const { email } = req.params;
+
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json(user);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

@@ -1,5 +1,5 @@
-const Payment = require("../models/Payment");
-const Course = require("../models/Course");
+const Payment = require("../models/payment");
+const Course = require("../models/course");
 const stripe = require("stripe")(process.env.StripeSecret);
 
 exports.createPayment = async (req, res) => {
