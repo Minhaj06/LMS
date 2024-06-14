@@ -1,20 +1,63 @@
 import React from "react";
-import { Card, Button } from "antd";
+import { Card, Button, Modal, notification } from "antd";
 import { format } from "date-fns";
 import { AiTwotoneEdit } from "react-icons/ai";
 import { FiTrash2 } from "react-icons/fi";
+import axios from "axios";
 
-const CourseCard = ({ course }) => {
+const { confirm } = Modal;
+
+const CourseCard = ({ course, onDelete }) => {
+  const showDeleteConfirm = () => {
+    confirm({
+      title: "Are you sure you want to delete this course?",
+      content: "This action cannot be undone.",
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
+      onOk() {
+        handleDelete();
+      },
+    });
+  };
+
+  const handleDelete = async () => {
+    try {
+      const { data } = await axios.delete(`/courses/${course?._id}`);
+
+      notification.success({
+        message: "Course Deleted",
+        description: "The course has been deleted successfully.",
+      });
+      onDelete(course._id);
+    } catch (error) {
+      notification.error({
+        message: "Error",
+        description: "There was an error deleting the course. Please try again.",
+      });
+      console.error("Error deleting course:", error);
+    }
+  };
+
   return (
     <Card
       className="max-w-sm rounded overflow-hidden shadow-lg m-4 relative"
       cover={
-        <img alt="course cover" src={course?.photo} className="object-cover h-48 w-full" />
+        <img
+          alt="course cover"
+          src={course?.photo || "https://via.placeholder.com/400x200"}
+          className="object-cover h-48 w-full"
+        />
       }
     >
       <div className="p-2 absolute top-0 right-0 flex gap-2">
         <AiTwotoneEdit role="button" size={20} className="text-yellow-600" />
-        <FiTrash2 role="button" size={20} className="text-red-600" />
+        <FiTrash2
+          role="button"
+          size={20}
+          className="text-red-600"
+          onClick={showDeleteConfirm}
+        />
       </div>
       <div className="p-4">
         <h2 className="text-2xl font-bold mb-2">{course.title}</h2>

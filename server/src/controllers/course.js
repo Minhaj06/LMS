@@ -62,8 +62,10 @@ exports.updateCourse = async (req, res) => {
 exports.deleteCourse = async (req, res) => {
   const { id } = req.params;
 
+  const user = await User.findOne({ email: req?.user?.email });
+
   try {
-    const course = await Course.findOneAndDelete({ _id: id, instructor: req.user.uid });
+    const course = await Course.findOneAndDelete({ _id: id, instructor: user?._id });
     if (!course) {
       return res.status(404).json({ message: "Course not found" });
     }
