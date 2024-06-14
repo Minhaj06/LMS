@@ -77,7 +77,9 @@ const CourseCard = ({ course, onDelete }) => {
           </div>
         </div>
         <div className="flex justify-between items-center">
-          <Button type="primary">Enroll Now</Button>
+          <Button onClick={() => navigate(`/dashboard/payment/${course?._id}`)} type="primary">
+            Enroll Now
+          </Button>
           <div className="text-sm text-gray-600">By {course.instructor.name}</div>
         </div>
       </div>

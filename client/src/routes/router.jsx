@@ -10,6 +10,7 @@ import CoursesPage from "../pages/dashboard/courses/CoursesPage";
 import PrivateRoute from "./PrivateRoute";
 import CourseCreatePage from "../pages/dashboard/courses/CourseCreatePage";
 import CourseUpdatePage from "../pages/dashboard/courses/CourseUpdatePage";
+import PaymentPage from "../pages/dashboard/PaymentPage";
 
 const router = createBrowserRouter([
   {
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
       {
         path: "course",
         element: <CourseCreatePage />,
+      },
+      {
+        path: "payment/:id",
+        element: <PaymentPage />,
       },
     ],
   },
