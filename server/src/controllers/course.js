@@ -13,6 +13,17 @@ exports.getCourses = async (req, res) => {
   }
 };
 
+exports.getCourseById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const course = await Course.findOne({ _id: id }).populate("instructor");
+    res.status(200).json(course);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 exports.addCourse = async (req, res) => {
   const { title, description, price, photo } = req.body;
   const email = req?.user?.email;
@@ -42,12 +53,14 @@ exports.addCourse = async (req, res) => {
 
 exports.updateCourse = async (req, res) => {
   const { id } = req.params;
-  const { title, description, price } = req.body;
+  const { title, description, price, photo } = req.body;
 
   try {
+    const user = await User.findOne({ email: req?.user?.email });
+
     const course = await Course.findOneAndUpdate(
-      { _id: id, instructor: req.user.uid },
-      { title, description, price },
+      { _id: id, instructor: user?._id },
+      { title, description, price, photo },
       { new: true }
     );
     if (!course) {
@@ -62,9 +75,9 @@ exports.updateCourse = async (req, res) => {
 exports.deleteCourse = async (req, res) => {
   const { id } = req.params;
 
-  const user = await User.findOne({ email: req?.user?.email });
-
   try {
+    const user = await User.findOne({ email: req?.user?.email });
+
     const course = await Course.findOneAndDelete({ _id: id, instructor: user?._id });
     if (!course) {
       return res.status(404).json({ message: "Course not found" });

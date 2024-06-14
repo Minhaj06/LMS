@@ -9,6 +9,7 @@ import OverviewPage from "../pages/dashboard/OverviewPage";
 import CoursesPage from "../pages/dashboard/courses/CoursesPage";
 import PrivateRoute from "./PrivateRoute";
 import CourseCreatePage from "../pages/dashboard/courses/CourseCreatePage";
+import CourseUpdatePage from "../pages/dashboard/courses/CourseUpdatePage";
 
 const router = createBrowserRouter([
   {
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
       {
         path: "courses",
         element: <CoursesPage />,
+      },
+      {
+        path: "courses/:id",
+        element: <CourseUpdatePage />,
       },
       {
         path: "course",

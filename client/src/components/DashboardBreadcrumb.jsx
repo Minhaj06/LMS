@@ -20,9 +20,7 @@ const DashboardBreadcrumb = () => {
   return (
     <div className="my-5 text-capitalize">
       <h1 className="text-2xl capitalize font-semibold mb-2">
-        {pathSegments[pathSegments.length - 1] === "admin"
-          ? pathSegments[pathSegments.length - 2]
-          : pathSegments[pathSegments.length - 1]}
+        {pathSegments[pathSegments.length - 2]}
       </h1>
 
       <Breadcrumb className="capitalize" items={breadcrumbItems} />

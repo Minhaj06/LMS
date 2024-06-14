@@ -4,10 +4,13 @@ import { format } from "date-fns";
 import { AiTwotoneEdit } from "react-icons/ai";
 import { FiTrash2 } from "react-icons/fi";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const { confirm } = Modal;
 
 const CourseCard = ({ course, onDelete }) => {
+  const navigate = useNavigate();
+
   const showDeleteConfirm = () => {
     confirm({
       title: "Are you sure you want to delete this course?",
@@ -51,7 +54,12 @@ const CourseCard = ({ course, onDelete }) => {
       }
     >
       <div className="p-2 absolute top-0 right-0 flex gap-2">
-        <AiTwotoneEdit role="button" size={20} className="text-yellow-600" />
+        <AiTwotoneEdit
+          onClick={() => navigate(`/dashboard/courses/${course?._id}`)}
+          role="button"
+          size={20}
+          className="text-yellow-600"
+        />
         <FiTrash2
           role="button"
           size={20}
